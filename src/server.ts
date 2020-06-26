@@ -1,16 +1,30 @@
-import express from 'express';
+import express, { request } from 'express';
+import path from 'path'
+import routes from './routes'
+import cors from 'cors';
 
 const app = express();
 
-app.get('/users', (request, response) => {
-    console.log('Listagem');
+app.use(cors());
+app.use(express.json()); //usado para que o express entenda que estamos trabalhando com JSON, não vem por padrão.
+app.use(routes);
 
-    response.json([
-        'AAAAA',
-        'BBBBB',
-        'CCCCC',
-        'DDDDD'
-    ]);
-});
+app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')));
 
 app.listen(3333);
+
+/*
+GET: Busca uma ou mais informações.
+POST: Criar uma nova informação.
+PUT: Atualizar uma informação.
+DELETE: Remover uma informação.
+Request Param: paramêtros que vem na própria rota
+Query Param: paramêtros que vem na própria rota geralmente opcionais para filtros (search, paginação, etc...).
+Request Body: paramêtros para criação/atualização.
+
+===Knex
+SELECT * FROM users WHERE name = 'Diego'
+knex('users').where('name', 'Diego').select('*')
+
+- "express.static()" serve para "servir" arquivos estaticos
+*/

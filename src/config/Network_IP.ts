@@ -1,4 +1,4 @@
-export const IP_ADDRESS = 'http://192.168.100.98:3333';
+export const IP_ADDRESS = '';
 
 /*
 Insira o IP e a porta do seu computador no campo acima antes de executar

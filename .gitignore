@@ -2,3 +2,4 @@ node_modules
 uploads/img_uploads/*
 !uploads/img_uploads/.gitkeep
 *.sqlite
+/*.sqlite

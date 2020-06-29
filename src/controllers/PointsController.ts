@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import knex from '../database/connection';
 
+import { IP_ADDRESS } from '../config/Network_IP';
 
 class PointsController {
 
@@ -13,13 +14,20 @@ class PointsController {
 
         const points = await knex('points')
             .join('points_items', 'points.id', '=', 'points_items.point_id')
-            .whereIn('points_items.item_id', parsedItems)//whereIn é o meso que o .includes
+            .whereIn('points_items.item_id', parsedItems)//whereIn é o mesmo que o .includes
             .where('city', String(city))
             .where('uf', String(uf))
             .distinct()
             .select('points.*')
 
-        return (response.json(points));
+        const serializedPoints = points.map(point => {
+            return {
+                ...point,
+                image_url: `${IP_ADDRESS}/uploads/img_uploads/${point.image}`,
+            };
+        });
+
+        return (response.json(serializedPoints));
     }
 
     async show(request: Request, response: Response) {
@@ -30,12 +38,17 @@ class PointsController {
             return response.status(400).json({ message: 'Point no found!' })
         }
 
+        const serializedPoint = {
+            ...point,
+            image_url: `${IP_ADDRESS}/uploads/img_uploads/${point.image}`,
+        };
+
         const items = await knex('items')
             .join('points_items', 'items.id', '=', 'points_items.item_id')
             .where('points_items.point_id', id)
             .select('items.title');
 
-        return response.json({ point, items });
+        return response.json({ point: serializedPoint, items });
 
     }
 
@@ -46,14 +59,14 @@ class PointsController {
         const trx = await knex.transaction();//usado para caso alguma query de erro, as demais dependentes não são executadas, já que temos duas querys, uma para inserir os points e outra dependente desta qeu insere os points_items.
 
         const point = {
-            image: 'https://images.unsplash.com/photo-1501523460185-2aa5d2a0f981?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&q=60',
+            image: request.file.filename,
             name,
             email,
             whatsapp,
             latitude,
             longitude,
             city,
-            uf
+            uf,
         };
 
         const insertedIds = await trx('points').insert(point);

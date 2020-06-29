@@ -18,7 +18,7 @@ Para executar esses projeto, deveremos:
 * Após a execução das migrations e da configuração do IP/Porta, você já pode iniciar o servidor com o comando `yarn start`.
 * Agora você pode iniciar um dois outros projetos que fazer parte dessa stack, seja o aplicativo mobile ou o web abaixo.
 
-# :nut_and_bolt: Aplicativos
+# :hammer: Aplicativos
 Fazem parte deste projeto os seguintes aplicativos: </br>
 [Mobile](https://github.com/diegodls/nwl-01_ecoleta_mobile) - Desenvolvido em React Native, utilizando Typescript. </br>
 [Web](https://github.com/diegodls/nwl-01_ecoleta_web) - Desenvolvido em React, utilizando Typescript.
